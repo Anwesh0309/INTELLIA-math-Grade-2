@@ -17,10 +17,7 @@ let audioCtx = null;
 // ElevenLabs — fixed voice and credentials (remote TTS voice)
 const ELEVENLABS_API_KEY =
   import.meta.env.VITE_ELEVENLABS_API_KEY || 'sk_b90743b791d41f1957e2f0b64eaf1b356258fb2f932ffef0';
-const ELEVENLABS_VOICE_ID =
-  (typeof process !== 'undefined' && process.env && process.env.ELEVENLABS_VOICE_ID) ||
-  import.meta.env.VITE_ELEVENLABS_VOICE_ID ||
-  'Xb7hH8MSUJpSbSDYk0k2';
+const ELEVENLABS_VOICE_ID = 'Xb7hH8MSUJpSbSDYk0k2';
 const ELEVENLABS_MODEL_ID = 'eleven_multilingual_v2';
 const ELEVENLABS_TTS_ENDPOINT = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
 
