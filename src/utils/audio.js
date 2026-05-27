@@ -15,10 +15,27 @@ const audioCache = new Map();
 let audioCtx = null;
 
 // ElevenLabs — fixed voice and credentials (remote TTS voice)
-const ELEVENLABS_API_KEY = 'sk_8635b825c246e6afc8e8fca4602dfb6521c288da7f124266';
+const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = 'Xb7hH8MSUJpSbSDYk0k2';
 const ELEVENLABS_MODEL_ID = 'eleven_multilingual_v2';
 const ELEVENLABS_TTS_ENDPOINT = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
+
+// FALLBACK: Browser TTS (free, works without credits)
+function speakWithBrowserTTS(text) {
+  return new Promise((resolve, reject) => {
+    if (!window.speechSynthesis) {
+      reject(new Error('Browser TTS not supported'));
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.onend = resolve;
+    utterance.onerror = reject;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  });
+}
 
 function getVoiceSettings(style) {
   let voiceSettings = { stability: 0.2, similarity_boost: 0.55, style: 0.5, use_speaker_boost: true };
@@ -76,6 +93,10 @@ async function fetchFromElevenLabs(text, style) {
   });
 
   try {
+    if (!ELEVENLABS_API_KEY) {
+      // No API key available at runtime (e.g., credits key not configured on host)
+      return null;
+    }
     const res = await fetch(ELEVENLABS_TTS_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -295,7 +316,12 @@ export async function narrate(segments, interrupt = false) {
     if (currentQueueSymbol !== queueSymbol) return;
 
     const segment = segments[i];
-    const source = await getAudioUrl(segment.text, segment.style);
+    let source = null;
+    try {
+      source = await getAudioUrl(segment.text, segment.style);
+    } catch (e) {
+      source = null;
+    }
 
     if (currentQueueSymbol !== queueSymbol) return;
     if (source && source.isCancelled) return;
@@ -310,10 +336,19 @@ export async function narrate(segments, interrupt = false) {
       continue;
     }
 
-    if (canUseLocalSpeech) {
-      const spoken = await speakText(segment.text);
+    // ElevenLabs failed (credits/network/etc.) → always attempt browser fallback.
+    try {
+      console.log('ElevenLabs failed (likely credits), using browser fallback');
+      await speakWithBrowserTTS(segment.text);
       if (currentQueueSymbol !== queueSymbol) return;
-      if (spoken) continue;
+      continue;
+    } catch (e) {
+      // If browser TTS fails, fall back to existing Web Speech flow if available.
+      if (canUseLocalSpeech) {
+        const spoken = await speakText(segment.text);
+        if (currentQueueSymbol !== queueSymbol) return;
+        if (spoken) continue;
+      }
     }
   }
 }
