@@ -16,7 +16,7 @@ export const LearnPhase = () => {
       text: "One morning, Wei Ming ran to the school playground. His friends were playing hopscotch! He counted the squares: 1, 2, 3... all the way to 10. \"Counting is fun!\" he laughed.",
       highlight: "✨ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10! ✨",
       characterMsg: "Let's count with Wei Ming! 🔢",
-      image: "/assets/images/story_playground.png",
+      image: "assets/images/story_playground.png",
       key: '3A'
     },
     {
@@ -24,7 +24,7 @@ export const LearnPhase = () => {
       text: "Back in the classroom, the teacher brought out colorful math blocks. \"Let's count higher!\" she said. Wei Ming grouped them into tens and ones, counting carefully: 10, 20, 30... 100!",
       highlight: "✨ 10, 20, 30, ... 100! ✨",
       characterMsg: "Blocks make counting easy! 🧱",
-      image: "/assets/images/story_classroom.png",
+      image: "assets/images/story_classroom.png",
       key: '3B'
     },
     {
@@ -32,7 +32,7 @@ export const LearnPhase = () => {
       text: "Wei Ming noticed something magical. One big flat square is exactly 100 little cubes! \"So if I have one flat and two rods... that's 120!\" he cheered. Understanding place value unlocked a whole new world.",
       highlight: "✨ 1 Hundred + 2 Tens = 120 ✨",
       characterMsg: "Place value is like a secret code! 🕵️‍♂️",
-      image: "/assets/images/story_classroom.png",
+      image: "assets/images/story_classroom.png",
       key: '3C'
     },
     {
@@ -40,7 +40,7 @@ export const LearnPhase = () => {
       text: "Now Wei Ming could read any number! When he saw 145, he confidently read out: 'One hundred and forty-five'. He was ready for the simulation cave to practice his new skills.",
       highlight: "✨ One hundred and forty-five ✨",
       characterMsg: "You're a counting master! 🏆",
-      image: "/assets/images/story_playground.png",
+      image: "assets/images/story_playground.png",
       key: '3D'
     }
   ];
