@@ -8,6 +8,7 @@ const ELEVENLABS_API_KEY =
   process.env.VITE_ELEVENLABS_API_KEY || 'sk_b90743b791d41f1957e2f0b64eaf1b356258fb2f932ffef0';
 
 export default defineConfig({
+  base: '/INTELLIA-math-Grade-2/',
   plugins: [react()],
   server: {
     port: 5173,
