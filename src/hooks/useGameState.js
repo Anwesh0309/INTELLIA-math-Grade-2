@@ -7,6 +7,7 @@ export function useGameState() {
   const setPhase = (phase) => dispatch({ type: 'SET_PHASE', payload: phase });
   const viewLearnSection = (section) => dispatch({ type: 'VIEW_LEARN_SECTION', payload: section });
   const completeStation = (station) => dispatch({ type: 'COMPLETE_STATION', payload: station });
+  const setActiveStation = (station) => dispatch({ type: 'SET_ACTIVE_STATION', payload: station });
   const setAudio = (enabled) => dispatch({ type: 'SET_AUDIO_ENABLED', payload: enabled });
   const recordAnswer = (id, selected, isCorrect) => dispatch({ type: 'RECORD_ANSWER', payload: { id, selected, isCorrect } });
   const nextQuestion = () => dispatch({ type: 'NEXT_QUESTION' });
@@ -17,6 +18,7 @@ export function useGameState() {
     setPhase,
     viewLearnSection,
     completeStation,
+    setActiveStation,
     setAudio,
     recordAnswer,
     nextQuestion,

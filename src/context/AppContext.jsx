@@ -28,6 +28,7 @@ const initialState = {
   currentPhase: PHASES.INTRO,
   learnSectionsViewed: [],          // ['3A', '3B', '3C', '3D']
   stationsCompleted: [],            // ['station1', 'station2', 'station3']
+  activeStation: null,              // 'station1' | 'station2' | 'station3' | null
   audioEnabled: true,
   currentlyPlaying: null,
   
@@ -88,6 +89,8 @@ function appReducer(state, action) {
       newState = { 
         ...state, 
         currentPhase: nextPhase,
+        // Reset active station when changing phases or returning to simulate
+        ...(nextPhase === PHASES.SIMULATE ? { activeStation: null } : {}),
         // If entering Practice, initialize the deterministic question bank
         ...(nextPhase === PHASES.PRACTICE ? {
           questionBank: state.questionBank.length > 0 ? state.questionBank : generateQuestionBank(42), // seed 42
@@ -119,6 +122,14 @@ function appReducer(state, action) {
         ...state,
         stationsCompleted: [...completed, station],
         xp: (state.xp || 0) + 50 // Award 50 XP for completing simulation station
+      };
+      break;
+    }
+
+    case 'SET_ACTIVE_STATION': {
+      newState = {
+        ...state,
+        activeStation: action.payload
       };
       break;
     }
@@ -203,6 +214,7 @@ function appReducer(state, action) {
         answers: {},
         learnSectionsViewed: [],
         stationsCompleted: [],
+        activeStation: null,
         xp: 0,
         streak: 0,
         maxStreak: 0,

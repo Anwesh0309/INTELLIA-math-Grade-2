@@ -5,6 +5,7 @@ export const PERSIST_KEYS = [
   'currentPhase', 
   'learnSectionsViewed', 
   'stationsCompleted',
+  'activeStation',
   'currentQuestionIndex', 
   'answers', 
   'xp', 
