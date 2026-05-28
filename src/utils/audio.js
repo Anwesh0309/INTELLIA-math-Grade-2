@@ -14,8 +14,11 @@ const audioCache = new Map();
 let audioCtx = null;
 
 // ElevenLabs — fixed voice and credentials (remote TTS voice)
-const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
-const ELEVENLABS_VOICE_ID = 'Xb7hH8MSUJpSbSDYk0k2';
+const ELEVENLABS_API_KEY = import.meta.env?.VITE_ELEVENLABS_API_KEY || (typeof process !== 'undefined' && process.env?.VITE_ELEVENLABS_API_KEY);
+const ELEVENLABS_VOICE_ID = 
+  import.meta.env?.VITE_ELEVENLABS_VOICE_ID || 
+  (typeof process !== 'undefined' && process.env?.VITE_ELEVENLABS_VOICE_ID) || 
+  'Xb7hH8MSUJpSbSDYk0k2';
 const ELEVENLABS_MODEL_ID = 'eleven_multilingual_v2';
 const ELEVENLABS_TTS_ENDPOINT = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
 
@@ -155,6 +158,14 @@ export function stopNarration() {
     currentAudioElement = null;
   }
 
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {
+      console.warn('Error cancelling speech synthesis:', e);
+    }
+  }
+
   if (currentPlaybackResolver) {
     currentPlaybackResolver({ isCancelled: true });
     currentPlaybackResolver = null;
@@ -226,6 +237,62 @@ function playAudio(audioSource) {
   });
 }
 
+function playWithBrowserTTS(text) {
+  return new Promise((resolve) => {
+    if (!audioEnabled) {
+      resolve({ isCancelled: true });
+      return;
+    }
+
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      console.warn('[TTS] Browser SpeechSynthesis not supported');
+      resolve();
+      return;
+    }
+
+    // Cancel any ongoing speech to start fresh
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {
+      console.warn('Error cancelling speech synthesis:', e);
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Try to find a nice English voice
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find((v) => v.lang.startsWith('en-') && v.name.toLowerCase().includes('google')) || 
+                        voices.find((v) => v.lang.startsWith('en-')) || 
+                        voices[0];
+    if (englishVoice) {
+      utterance.voice = englishVoice;
+    }
+
+    // Set voice properties (friendly, child-like speed/pitch if possible)
+    utterance.rate = 0.95; // Slightly slower for primary school kids
+    utterance.pitch = 1.0;
+
+    currentPlaybackResolver = resolve;
+
+    utterance.onend = () => {
+      if (currentPlaybackResolver === resolve) {
+        currentPlaybackResolver = null;
+        resolve();
+      }
+    };
+
+    utterance.onerror = (e) => {
+      console.error('[TTS] Browser SpeechSynthesis error:', e);
+      if (currentPlaybackResolver === resolve) {
+        currentPlaybackResolver = null;
+        resolve();
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
 export async function narrate(segments, interrupt = false) {
   if (!audioEnabled) return;
   if (interrupt) stopNarration();
@@ -257,7 +324,10 @@ export async function narrate(segments, interrupt = false) {
       continue;
     }
 
-    console.warn('[TTS] No audio source available for text:', segment.text);
+    // Fallback to browser TTS if audio source is not available (e.g. ElevenLabs API offline or key exhausted)
+    console.log('[TTS] Falling back to Browser SpeechSynthesis for:', segment.text);
+    const playResult = await playWithBrowserTTS(segment.text);
+    if (playResult && playResult.isCancelled) return;
   }
 }
 
