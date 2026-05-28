@@ -79,7 +79,7 @@ async function fetchFromElevenLabs(text, style) {
 
   try {
     if (!ELEVENLABS_API_KEY) {
-      // No API key available at runtime (e.g., credits key not configured on host)
+      console.warn('[TTS] No VITE_ELEVENLABS_API_KEY found in environment variables. Falling back to browser SpeechSynthesis.');
       return null;
     }
     const res = await fetch(ELEVENLABS_TTS_ENDPOINT, {
