@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-audio": "node scripts/generate_audio.js",
+    "clean-audio": "node scripts/clean_audio.js"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
