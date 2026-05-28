@@ -5,7 +5,6 @@ let audioEnabled = true;
 let currentQueueSymbol = null;
 let currentAudioElement = null;
 let currentPlaybackResolver = null;
-let currentUtterance = null;
 let activeFetchControllers = new Set();
 
 // In-memory cache for fetched audio blob URLs
@@ -19,23 +18,6 @@ const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = 'Xb7hH8MSUJpSbSDYk0k2';
 const ELEVENLABS_MODEL_ID = 'eleven_multilingual_v2';
 const ELEVENLABS_TTS_ENDPOINT = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
-
-// FALLBACK: Browser TTS (free, works without credits)
-function speakWithBrowserTTS(text) {
-  return new Promise((resolve, reject) => {
-    if (!window.speechSynthesis) {
-      reject(new Error('Browser TTS not supported'));
-      return;
-    }
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.onend = resolve;
-    utterance.onerror = reject;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  });
-}
 
 function getVoiceSettings(style) {
   let voiceSettings = { stability: 0.2, similarity_boost: 0.55, style: 0.5, use_speaker_boost: true };
@@ -162,7 +144,6 @@ export function stopNarration() {
 
   activeFetchControllers.forEach((ctrl) => ctrl.abort());
   activeFetchControllers.clear();
-  cancelSpeechSynthesis();
 
   if (currentAudioElement) {
     try {
@@ -178,61 +159,6 @@ export function stopNarration() {
     currentPlaybackResolver({ isCancelled: true });
     currentPlaybackResolver = null;
   }
-}
-
-function cancelSpeechSynthesis() {
-  if (typeof window !== 'undefined' && window.speechSynthesis) {
-    try {
-      window.speechSynthesis.cancel();
-    } catch (e) {
-      console.warn('SpeechSynthesis cancel failed:', e);
-    }
-  }
-  currentUtterance = null;
-}
-
-function speakText(text) {
-  return new Promise((resolve) => {
-    if (
-      typeof window === 'undefined' ||
-      !window.speechSynthesis ||
-      !window.SpeechSynthesisUtterance
-    ) {
-      resolve(false);
-      return;
-    }
-
-    cancelSpeechSynthesis();
-
-    const utterance = new window.SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 1.05;
-    utterance.pitch = 1.05;
-    utterance.volume = 1;
-    currentUtterance = utterance;
-
-    utterance.onend = () => {
-      if (currentUtterance === utterance) {
-        currentUtterance = null;
-      }
-      resolve(true);
-    };
-
-    utterance.onerror = () => {
-      if (currentUtterance === utterance) {
-        currentUtterance = null;
-      }
-      resolve(false);
-    };
-
-    try {
-      window.speechSynthesis.speak(utterance);
-    } catch (err) {
-      console.warn('SpeechSynthesis speak failed:', err);
-      currentUtterance = null;
-      resolve(false);
-    }
-  });
 }
 
 function playAudio(audioSource) {
@@ -307,11 +233,6 @@ export async function narrate(segments, interrupt = false) {
   const queueSymbol = Symbol('narrationQueue');
   currentQueueSymbol = queueSymbol;
 
-  const canUseLocalSpeech =
-    typeof window !== 'undefined' &&
-    window.speechSynthesis &&
-    window.SpeechSynthesisUtterance;
-
   for (let i = 0; i < segments.length; i++) {
     if (currentQueueSymbol !== queueSymbol) return;
 
@@ -336,20 +257,7 @@ export async function narrate(segments, interrupt = false) {
       continue;
     }
 
-    // ElevenLabs failed (credits/network/etc.) → always attempt browser fallback.
-    try {
-      console.log('ElevenLabs failed (likely credits), using browser fallback');
-      await speakWithBrowserTTS(segment.text);
-      if (currentQueueSymbol !== queueSymbol) return;
-      continue;
-    } catch (e) {
-      // If browser TTS fails, fall back to existing Web Speech flow if available.
-      if (canUseLocalSpeech) {
-        const spoken = await speakText(segment.text);
-        if (currentQueueSymbol !== queueSymbol) return;
-        if (spoken) continue;
-      }
-    }
+    console.warn('[TTS] No audio source available for text:', segment.text);
   }
 }
 
