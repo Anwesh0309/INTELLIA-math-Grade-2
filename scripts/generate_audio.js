@@ -50,6 +50,11 @@ const phrases = [
   { text: 'Incredible work! You are now a Number Explorer!', style: 'celebration' },
   { text: 'You can read and write all numbers from one hundred to two hundred!', style: 'celebration' },
   { text: 'Numby has collected all the crystals thanks to you!', style: 'statement' },
+  // Story (Learn Phase) Texts
+  { text: 'One morning, Wei Ming ran to the school playground. His friends were playing hopscotch! He counted the squares: 1, 2, 3... all the way to 10. "Counting is fun!" he laughed.', style: 'statement' },
+  { text: 'Back in the classroom, the teacher brought out colorful math blocks. "Let\'s count higher!" she said. Wei Ming grouped them into tens and ones, counting carefully: 10, 20, 30... 100!', style: 'statement' },
+  { text: 'Wei Ming noticed something magical. One big flat square is exactly 100 little cubes! "So if I have one flat and two rods... that\'s 120!" he cheered. Understanding place value unlocked a whole new world.', style: 'statement' },
+  { text: 'Now Wei Ming could read any number! When he saw 145, he confidently read out: \'One hundred and forty-five\'. He was ready for the simulation cave to practice his new skills.', style: 'statement' }
 ];
 
 function sanitizeFilename(text, index) {

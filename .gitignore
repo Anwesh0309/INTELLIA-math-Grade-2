@@ -1,6 +1,5 @@
 .env.local
 node_modules/
-public/assets/audio/
 dist/
 build/
 .vscode/

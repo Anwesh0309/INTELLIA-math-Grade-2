@@ -26,5 +26,9 @@ export const audioMap = {
   "Not quite! Let's try again. You can do it!": "/assets/audio/audio_not_quite_let_s_try_again_you__22.mp3",
   "Incredible work! You are now a Number Explorer!": "/assets/audio/audio_incredible_work_you_are_now_a__23.mp3",
   "You can read and write all numbers from one hundred to two hundred!": "/assets/audio/audio_you_can_read_and_write_all_num_24.mp3",
-  "Numby has collected all the crystals thanks to you!": "/assets/audio/audio_numby_has_collected_all_the_cr_25.mp3"
+  "Numby has collected all the crystals thanks to you!": "/assets/audio/audio_numby_has_collected_all_the_cr_25.mp3",
+  "One morning, Wei Ming ran to the school playground. His friends were playing hopscotch! He counted the squares: 1, 2, 3... all the way to 10. \"Counting is fun!\" he laughed.": "/assets/audio/audio_one_morning_wei_ming_ran_to_th_26.mp3",
+  "Back in the classroom, the teacher brought out colorful math blocks. \"Let's count higher!\" she said. Wei Ming grouped them into tens and ones, counting carefully: 10, 20, 30... 100!": "/assets/audio/audio_back_in_the_classroom_the_teac_27.mp3",
+  "Wei Ming noticed something magical. One big flat square is exactly 100 little cubes! \"So if I have one flat and two rods... that's 120!\" he cheered. Understanding place value unlocked a whole new world.": "/assets/audio/audio_wei_ming_noticed_something_mag_28.mp3",
+  "Now Wei Ming could read any number! When he saw 145, he confidently read out: 'One hundred and forty-five'. He was ready for the simulation cave to practice his new skills.": "/assets/audio/audio_now_wei_ming_could_read_any_nu_29.mp3"
 };
