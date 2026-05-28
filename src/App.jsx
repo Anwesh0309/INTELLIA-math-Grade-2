@@ -12,7 +12,7 @@ import XPCounter from './components/ui/XPCounter.jsx';
 import { AnimatePresence } from 'framer-motion';
 
 const PhaseRouter = () => {
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const { currentPhase } = state;
 
   const renderPhase = () => {
@@ -61,7 +61,7 @@ const PhaseRouter = () => {
         {/* Home button top left */}
         <div className="pointer-events-auto z-20">
           <button 
-            onClick={() => window.location.reload()}
+            onClick={() => dispatch({ type: 'RESET_STATE' })}
             className="h-10 px-4 bg-[#1A1130]/90 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition shadow-lg border border-white/5 gap-2 font-bold text-sm backdrop-blur-md"
           >
             <span>🏠</span> Home

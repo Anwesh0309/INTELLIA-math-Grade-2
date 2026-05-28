@@ -23,8 +23,8 @@ const ReflectPhase = () => {
   };
 
   const handleHome = () => {
-    // Usually goes back to hub or intro. Here we'll just reload or go to intro
-    window.location.reload();
+    // Reset state to return to the intro page
+    dispatch({ type: 'RESET_STATE' });
   };
 
   // Generate 40 random confetti pieces
