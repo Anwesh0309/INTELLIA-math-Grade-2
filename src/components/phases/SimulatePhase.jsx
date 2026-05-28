@@ -12,7 +12,7 @@ import NumberWordForge from '../simulations/NumberWordForge.jsx';
 
 export const SimulatePhase = () => {
   const { state, completeStation, setPhase } = useGameState();
-  const { stationsCompleted = [] } = state;
+  const stationsCompleted = Array.isArray(state?.stationsCompleted) ? state.stationsCompleted : [];
   const [activeStation, setActiveStation] = useState(null); // 'station1' | 'station2' | 'station3' | null (hub)
 
   const handleStationComplete = (stationKey) => {

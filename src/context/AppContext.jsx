@@ -58,8 +58,8 @@ function appReducer(state, action) {
       const nextPhase = action.payload;
       const validNexts = VALID_TRANSITIONS[state.currentPhase] || [];
       
-      // Strict state transition validation
-      if (!validNexts.includes(nextPhase)) {
+      // Strict state transition validation (allow direct navigation to simulate or intro at any time)
+      if (nextPhase !== PHASES.SIMULATE && nextPhase !== PHASES.INTRO && !validNexts.includes(nextPhase)) {
         console.warn(`Invalid state transition from ${state.currentPhase} to ${nextPhase}`);
         return state;
       }
@@ -77,7 +77,8 @@ function appReducer(state, action) {
       // Guard Simulate -> Practice transition
       if (state.currentPhase === PHASES.SIMULATE && nextPhase === PHASES.PRACTICE) {
         const required = ['station1', 'station2', 'station3'];
-        const allDone = required.every(st => state.stationsCompleted.includes(st));
+        const completed = Array.isArray(state.stationsCompleted) ? state.stationsCompleted : [];
+        const allDone = required.every(st => completed.includes(st));
         if (!allDone) {
           console.warn('Cannot transition to practice: not all simulation stations completed');
           return state;
@@ -112,11 +113,12 @@ function appReducer(state, action) {
 
     case 'COMPLETE_STATION': {
       const station = action.payload;
-      if (state.stationsCompleted.includes(station)) return state;
+      const completed = Array.isArray(state.stationsCompleted) ? state.stationsCompleted : [];
+      if (completed.includes(station)) return state;
       newState = {
         ...state,
-        stationsCompleted: [...state.stationsCompleted, station],
-        xp: state.xp + 50 // Award 50 XP for completing simulation station
+        stationsCompleted: [...completed, station],
+        xp: (state.xp || 0) + 50 // Award 50 XP for completing simulation station
       };
       break;
     }

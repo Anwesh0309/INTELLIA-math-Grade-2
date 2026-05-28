@@ -61,7 +61,7 @@ const PhaseRouter = () => {
         {/* Home button top left */}
         <div className="pointer-events-auto z-20">
           <button 
-            onClick={() => dispatch({ type: 'RESET_STATE' })}
+            onClick={() => dispatch({ type: 'SET_PHASE', payload: 'simulate' })}
             className="h-10 px-4 bg-[#1A1130]/90 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition shadow-lg border border-white/5 gap-2 font-bold text-sm backdrop-blur-md"
           >
             <span>🏠</span> Home

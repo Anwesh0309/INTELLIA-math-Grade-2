@@ -5,7 +5,9 @@ import { PHASES } from '../../context/AppContext.jsx';
 
 export const PhaseNavigation = () => {
   const { state, setPhase } = useGameState();
-  const { currentPhase, learnSectionsViewed = [], stationsCompleted = [] } = state;
+  const { currentPhase } = state;
+  const learnSectionsViewed = Array.isArray(state?.learnSectionsViewed) ? state.learnSectionsViewed : [];
+  const stationsCompleted = Array.isArray(state?.stationsCompleted) ? state.stationsCompleted : [];
 
   const phaseSequence = [
     { key: PHASES.WONDER, label: 'Wonder', icon: '🔍', num: '01' },

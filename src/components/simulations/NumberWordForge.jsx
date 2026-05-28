@@ -94,10 +94,12 @@ export const NumberWordForge = ({ onComplete }) => {
       if (newConnections.length === 4) {
         narrate(correctAnswerNarration(), true);
         setTimeout(() => {
-          if (rounds + 1 >= 5) {
+          if (rounds + 1 >= 3) {
             setGamePhase('complete');
             setTimeout(() => {
-              onComplete();
+              if (typeof onComplete === 'function') {
+                onComplete();
+              }
             }, 2000);
           } else {
             setRounds(rounds + 1);
@@ -142,7 +144,7 @@ export const NumberWordForge = ({ onComplete }) => {
           <span className="text-sm font-extrabold text-crystal-teal">Number Word Forge</span>
         </div>
         <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(3)].map((_, i) => (
             <svg
               key={i}
               xmlns="http://www.w3.org/2000/svg"

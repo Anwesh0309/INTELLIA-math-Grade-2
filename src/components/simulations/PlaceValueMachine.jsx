@@ -13,11 +13,15 @@ export const PlaceValueMachine = ({ onComplete }) => {
   const [selectedSlot, setSelectedSlot] = useState(null); // Click-to-place active slot
   const [feedback, setFeedback] = useState(null);
 
-  // References to slots for collision detection
+  // Stable refs for collision detection
+  const slotHRef = useRef(null);
+  const slotTRef = useRef(null);
+  const slotORef = useRef(null);
+
   const slotRefs = {
-    H: useRef(null),
-    T: useRef(null),
-    O: useRef(null),
+    H: slotHRef,
+    T: slotTRef,
+    O: slotORef,
   };
 
   const initRound = () => {
@@ -80,10 +84,12 @@ export const PlaceValueMachine = ({ onComplete }) => {
     narrate(correctAnswerNarration(), true);
     
     setTimeout(() => {
-      if (rounds + 1 >= 5) {
+      if (rounds + 1 >= 3) {
         setGamePhase('complete');
         setTimeout(() => {
-          onComplete();
+          if (typeof onComplete === 'function') {
+            onComplete();
+          }
         }, 2000);
       } else {
         setRounds(rounds + 1);
@@ -127,7 +133,7 @@ export const PlaceValueMachine = ({ onComplete }) => {
           <span className="text-sm font-extrabold text-crystal-purple">Place Value Machine</span>
         </div>
         <div className="flex gap-1">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(3)].map((_, i) => (
             <svg
               key={i}
               xmlns="http://www.w3.org/2000/svg"

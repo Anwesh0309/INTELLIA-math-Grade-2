@@ -23,8 +23,8 @@ const ReflectPhase = () => {
   };
 
   const handleHome = () => {
-    // Reset state to return to the intro page
-    dispatch({ type: 'RESET_STATE' });
+    // Navigate to the Simulation phases
+    dispatch({ type: 'SET_PHASE', payload: 'simulate' });
   };
 
   // Generate 40 random confetti pieces
