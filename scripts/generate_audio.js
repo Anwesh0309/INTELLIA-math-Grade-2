@@ -23,6 +23,25 @@ const styleSettings = {
   celebration: { stability: 0.45, similarity_boost: 0.65, style: 0.8 }
 };
 
+const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six',
+              'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+              'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+              'eighteen', 'nineteen'];
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty',
+              'sixty', 'seventy', 'eighty', 'ninety'];
+
+function numberToWords(n) {
+  if (n === 100) return 'one hundred';
+  if (n === 200) return 'two hundred';
+  const remainder = n - 100;
+  if (remainder < 20) return `one hundred and ${ONES[remainder]}`;
+  const tens = Math.floor(remainder / 10);
+  const ones = remainder % 10;
+  const tensWord = TENS[tens];
+  const onesWord = ones ? `-${ONES[ones]}` : '';
+  return `one hundred and ${tensWord}${onesWord}`;
+}
+
 const phrases = [
   { text: 'Welcome, adventurer! Numby needs your help!', style: 'celebration' },
   { text: 'Deep inside the Number Cave, there are mysterious crystals with numbers beyond one hundred.', style: 'statement' },
@@ -56,6 +75,33 @@ const phrases = [
   { text: 'Wei Ming noticed something magical. One big flat square is exactly 100 little cubes! "So if I have one flat and two rods... that\'s 120!" he cheered. Understanding place value unlocked a whole new world.', style: 'statement' },
   { text: 'Now Wei Ming could read any number! When he saw 145, he confidently read out: \'One hundred and forty-five\'. He was ready for the simulation cave to practice his new skills.', style: 'statement' }
 ];
+
+// Programmatically expand phrases with all 101 numbers and game segments
+for (let n = 100; n <= 200; n++) {
+  phrases.push({ text: numberToWords(n), style: 'emphasis' });
+}
+
+const dynamicSegments = [
+  "What is the word form of",
+  "What number is",
+  "In the number",
+  ", what digit is in the",
+  "place?",
+  "Which is greater",
+  "or",
+  "hundreds",
+  "tens",
+  "ones",
+  "is",
+  "Correct digit for the Hundreds place!",
+  "Correct digit for the Tens place!",
+  "Correct digit for the Ones place!",
+  "One hundred!",
+  "Choose the correct number!"
+];
+dynamicSegments.forEach(seg => {
+  phrases.push({ text: seg, style: 'statement' });
+});
 
 function sanitizeFilename(text, index) {
   const sanitized = text.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30);

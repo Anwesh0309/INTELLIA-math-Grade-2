@@ -7,12 +7,57 @@ import { NumbCharacter } from '../ui/NumbCharacter.jsx';
 import ProgressBar from '../ui/ProgressBar.jsx';
 import { narrate, playSoundEffect, stopNarration } from '../../utils/audio.js';
 import { correctAnswerNarration, wrongAnswerNarration } from '../../utils/narration.js';
+import { numberToWords } from '../../utils/numberWords.js';
 
 // Import question type sub-components
 import QuestionTypeA from '../practice/QuestionTypeA.jsx';
 import QuestionTypeB from '../practice/QuestionTypeB.jsx';
 import QuestionTypeC from '../practice/QuestionTypeC.jsx';
 import QuestionTypeD from '../practice/QuestionTypeD.jsx';
+
+function getQuestionNarration(q) {
+  if (!q) return [];
+  const parts = q.id.split('_');
+  const type = q.type;
+  
+  if (type === 'A') {
+    const n = Number(parts[1]);
+    return [
+      { text: "What is the word form of", style: 'question' },
+      { text: numberToWords(n), style: 'emphasis' }
+    ];
+  }
+  if (type === 'B') {
+    const n = Number(parts[1]);
+    return [
+      { text: "What number is", style: 'question' },
+      { text: numberToWords(n), style: 'emphasis' }
+    ];
+  }
+  if (type === 'C') {
+    const n = Number(parts[1]);
+    const place = parts[2];
+    return [
+      { text: "In the number", style: 'question' },
+      { text: numberToWords(n), style: 'emphasis' },
+      { text: ", what digit is in the", style: 'question' },
+      { text: place, style: 'emphasis' },
+      { text: "place?", style: 'question' }
+    ];
+  }
+  if (type === 'D') {
+    const n = Number(parts[1]);
+    const other = Number(parts[2]);
+    return [
+      { text: "Which is greater", style: 'question' },
+      { text: numberToWords(n), style: 'emphasis' },
+      { text: "or", style: 'question' },
+      { text: numberToWords(other), style: 'emphasis' }
+    ];
+  }
+  
+  return [{ text: q.stemAudio, style: 'question' }];
+}
 
 export const PracticePhase = () => {
   const { state, recordAnswer, nextQuestion } = useGameState();
@@ -45,7 +90,7 @@ export const PracticePhase = () => {
       }
       
       // Speak stem
-      narrate([{ text: currentQuestion.stemAudio, style: 'question' }], true);
+      narrate(getQuestionNarration(currentQuestion), true);
     }
     return () => {
       if (autoAdvanceTimer.current) clearTimeout(autoAdvanceTimer.current);

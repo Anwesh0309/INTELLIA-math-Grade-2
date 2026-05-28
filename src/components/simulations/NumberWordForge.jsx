@@ -83,7 +83,11 @@ export const NumberWordForge = ({ onComplete }) => {
     if (isCorrect) {
       const newConnections = [...connections, { leftId: activeLeft.num, rightId: item.num }];
       setConnections(newConnections);
-      narrate([{ text: `${activeLeft.num} is ${activeLeft.words}!`, style: 'emphasis' }], true);
+      narrate([
+        { text: numberToWords(activeLeft.num), style: 'emphasis' },
+        { text: 'is', style: 'statement' },
+        { text: activeLeft.words, style: 'emphasis' }
+      ], true);
       setActiveLeft(null);
 
       // Check if all 4 matched!
