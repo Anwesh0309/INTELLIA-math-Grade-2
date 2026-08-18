@@ -158,20 +158,20 @@ export const PracticePhase = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6" id="practice-phase-container">
+    <div className="w-full max-w-4xl mx-auto h-full flex flex-col justify-center gap-4 md:gap-6 overflow-hidden my-auto" id="practice-phase-container">
       {/* Top dashboard info */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#30235C]/60 p-4 rounded-2xl border border-white/10 shadow-lg text-center items-center">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 bg-[#30235C]/80 p-4 rounded-2xl border border-white/10 shadow-2xl text-center items-center">
         <div>
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none block mb-0.5">Exam Score</span>
-          <span className="text-lg font-black text-amber-300">{sessionScore} / {totalQuestions}</span>
+          <span className="text-xs text-slate-300 font-black uppercase tracking-widest leading-none block mb-1">Exam Score</span>
+          <span className="text-xl md:text-2xl font-black text-amber-300">{sessionScore} / {totalQuestions}</span>
         </div>
         <div>
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none block mb-0.5">Current Streak</span>
-          <span className="text-lg font-black text-crystal-blue">{streak} 🔥</span>
+          <span className="text-xs text-slate-300 font-black uppercase tracking-widest leading-none block mb-1">Current Streak</span>
+          <span className="text-xl md:text-2xl font-black text-crystal-blue">{streak} 🔥</span>
         </div>
         <div>
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none block mb-0.5">Best Streak</span>
-          <span className="text-lg font-black text-crystal-purple">{maxStreak} 🔥</span>
+          <span className="text-xs text-slate-300 font-black uppercase tracking-widest leading-none block mb-1">Best Streak</span>
+          <span className="text-xl md:text-2xl font-black text-crystal-purple">{maxStreak} 🔥</span>
         </div>
         <div className="col-span-2 md:col-span-1">
           <ProgressBar current={currentQuestionIndex + 1} total={totalQuestions} color="blue" />
@@ -179,26 +179,26 @@ export const PracticePhase = () => {
       </div>
 
       {/* Main split question layout */}
-      <div className="flex flex-col md:flex-row gap-6 items-stretch">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch">
         
         {/* Left Panel: Numby status */}
-        <div className="w-full md:w-60 glass-card p-6 border-white/5 flex flex-col justify-between items-center text-center shadow-xl">
+        <div className="w-full md:w-60 glass-card p-5 border-white/10 flex flex-col justify-between items-center text-center shadow-xl shrink-0">
           <NumbCharacter mood={numbyMood} />
           
-          <div className="mt-4 p-3 bg-[#413175]/60 rounded-xl border border-white/10 w-full">
-            <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Explorer status</span>
-            <p className="text-xs text-slate-300 font-semibold mt-1">
+          <div className="mt-3 p-3 bg-[#413175]/80 rounded-xl border border-white/10 w-full shadow-inner">
+            <span className="text-[10px] uppercase font-black text-slate-300 tracking-wider">Explorer status</span>
+            <p className="text-sm text-white font-black mt-1">
               {streak >= 10 ? "🏆 Number Master!" : streak >= 5 ? "⚡ Counting Hero!" : "🧭 Crystal Explorer"}
             </p>
           </div>
         </div>
 
         {/* Right Panel: Graded active Question */}
-        <div className="flex-1 glass-card p-6 md:p-8 border-white/5 flex flex-col justify-between shadow-xl min-h-[360px] relative overflow-hidden">
+        <div className="flex-1 glass-card p-6 md:p-8 border-white/10 flex flex-col justify-between shadow-2xl min-h-[340px] relative overflow-hidden">
           <div className="absolute w-40 h-40 bg-blue-500/5 rounded-full blur-[4px] -top-10 -right-10 pointer-events-none" />
 
           {/* Active Question Core */}
-          <div className="flex-1 w-full flex flex-col justify-center relative z-10">
+          <div className="flex-1 w-full flex flex-col justify-center relative z-10 my-auto">
             {renderQuestion()}
           </div>
         </div>

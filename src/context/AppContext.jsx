@@ -57,34 +57,6 @@ function appReducer(state, action) {
   switch (action.type) {
     case 'SET_PHASE': {
       const nextPhase = action.payload;
-      const validNexts = VALID_TRANSITIONS[state.currentPhase] || [];
-      
-      // Strict state transition validation (allow direct navigation to simulate or intro at any time)
-      if (nextPhase !== PHASES.SIMULATE && nextPhase !== PHASES.INTRO && !validNexts.includes(nextPhase)) {
-        console.warn(`Invalid state transition from ${state.currentPhase} to ${nextPhase}`);
-        return state;
-      }
-      
-      // Guard Learn -> Simulate transition
-      if (state.currentPhase === PHASES.LEARN && nextPhase === PHASES.SIMULATE) {
-        const required = ['3A', '3B', '3C', '3D'];
-        const allViewed = required.every(sec => state.learnSectionsViewed.includes(sec));
-        if (!allViewed) {
-          console.warn('Cannot transition to simulate: not all learn sections viewed');
-          return state;
-        }
-      }
-
-      // Guard Simulate -> Practice transition
-      if (state.currentPhase === PHASES.SIMULATE && nextPhase === PHASES.PRACTICE) {
-        const required = ['station1', 'station2', 'station3'];
-        const completed = Array.isArray(state.stationsCompleted) ? state.stationsCompleted : [];
-        const allDone = required.every(st => completed.includes(st));
-        if (!allDone) {
-          console.warn('Cannot transition to practice: not all simulation stations completed');
-          return state;
-        }
-      }
 
       newState = { 
         ...state, 
@@ -209,6 +181,7 @@ function appReducer(state, action) {
       clearState();
       newState = {
         ...initialState,
+        currentPhase: PHASES.INTRO,
         questionBank: [],
         currentQuestionIndex: 0,
         answers: {},

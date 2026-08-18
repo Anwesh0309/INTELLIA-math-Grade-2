@@ -93,18 +93,18 @@ export const NumberWordForge = ({ onComplete }) => {
       // Check if all 4 matched!
       if (newConnections.length === 4) {
         narrate(correctAnswerNarration(), true);
-        setTimeout(() => {
-          if (rounds + 1 >= 3) {
-            setGamePhase('complete');
-            setTimeout(() => {
-              if (typeof onComplete === 'function') {
-                onComplete();
-              }
-            }, 2000);
-          } else {
-            setRounds(rounds + 1);
-          }
-        }, 1800);
+        if (rounds + 1 >= 3) {
+          setGamePhase('complete');
+          setTimeout(() => {
+            if (typeof onComplete === 'function') {
+              onComplete();
+            }
+          }, 1500);
+        } else {
+          setTimeout(() => {
+            setRounds(prev => prev + 1);
+          }, 1200);
+        }
       }
     } else {
       // Trigger brief red flash

@@ -41,7 +41,23 @@ function isValidMpegBlob(blob, contentType) {
 
 export const setAudioEnabled = (enabled) => {
   audioEnabled = enabled;
-  if (!enabled) stopNarration();
+  if (!enabled) {
+    stopNarration();
+  } else {
+    // Resume web audio context if suspended
+    if (typeof window !== 'undefined') {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {
+        console.warn('Error resuming AudioContext:', e);
+      }
+    }
+  }
 };
 
 export const isAudioEnabled = () => audioEnabled;

@@ -58,15 +58,17 @@ const PhaseRouter = () => {
       ))}
       {/* Global Header */}
       <header className="relative w-full shrink-0 z-[60] flex items-center justify-between px-4 pt-4 pb-2 min-h-[72px]">
-        {/* Home button top left */}
-        <div className="pointer-events-auto z-20">
-          <button 
-            onClick={() => dispatch({ type: 'SET_PHASE', payload: 'simulate' })}
-            className="h-10 px-4 bg-[#1A1130]/90 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition shadow-lg border border-white/5 gap-2 font-bold text-sm backdrop-blur-md"
-          >
-            <span>🏠</span> Home
-          </button>
-        </div>
+        {/* Home button top left (Hidden in intro phase) */}
+        {currentPhase !== 'intro' && (
+          <div className="pointer-events-auto z-20">
+            <button 
+              onClick={() => dispatch({ type: 'SET_PHASE', payload: 'intro' })}
+              className="h-10 px-4 bg-[#1A1130]/90 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition shadow-lg border border-white/5 gap-2 font-bold text-sm backdrop-blur-md cursor-pointer"
+            >
+              <span>🏠</span> Home
+            </button>
+          </div>
+        )}
 
         {/* PhaseNavigation Centered */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -75,32 +77,29 @@ const PhaseRouter = () => {
           </div>
         </div>
 
-        {/* Close button top right */}
-        <div className="pointer-events-auto z-20">
-          <button 
-            onClick={() => window.history.back()}
-            className="w-10 h-10 bg-blue-500 rounded-md flex items-center justify-center text-white hover:bg-blue-400 transition shadow-lg border border-blue-400/20"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
+        {/* Close button top right (Hidden in intro phase) */}
+        {currentPhase !== 'intro' && (
+          <div className="pointer-events-auto z-20">
+            <button 
+              onClick={() => window.history.back()}
+              className="w-10 h-10 bg-blue-500 rounded-md flex items-center justify-center text-white hover:bg-blue-400 transition shadow-lg border border-blue-400/20 cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        )}
       </header>
       
       {/* XP Counter bottom left (fixed relative to screen) */}
       <div className="absolute bottom-4 left-4 z-[60]">
         <XPCounter />
       </div>
-      
-      {/* Audio Toggle bottom right (fixed relative to screen) */}
-      <div className="absolute bottom-4 right-4 z-[60]">
-        <AudioToggle />
-      </div>
 
-      {/* Main Scrollable Game Content */}
-      <main className="flex-1 w-full relative overflow-y-auto overflow-x-hidden pt-4 pb-20">
+      {/* Main Game Content Frame (Non-Scrolling 100vh Layout) */}
+      <main className="flex-1 w-full relative overflow-hidden flex flex-col items-center justify-center p-2 md:p-4">
         <AnimatePresence mode="wait">
           {renderPhase()}
         </AnimatePresence>

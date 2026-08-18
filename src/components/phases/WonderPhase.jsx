@@ -15,15 +15,14 @@ export const WonderPhase = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="absolute inset-0 flex flex-col items-center justify-center w-full h-full font-sans overflow-hidden bg-transparent"
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      className="w-full h-full flex flex-col items-center justify-center font-sans overflow-hidden bg-transparent"
       id="wonder-phase-container"
     >
       {/* Background Floating Emojis */}
       <div className="absolute inset-0 pointer-events-none opacity-30 select-none overflow-hidden">
-        {/* Sample floating emojis mapped from screenshot */}
         <div className="absolute top-[15%] left-[10%] text-3xl opacity-50 transform -rotate-12">👋🏽</div>
         <div className="absolute top-[20%] right-[25%] text-2xl opacity-40">🎪</div>
         <div className="absolute top-[65%] left-[15%] text-4xl opacity-30">🎪</div>
@@ -33,15 +32,15 @@ export const WonderPhase = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex flex-col items-center max-w-3xl w-full px-4 mt-16">
+      <div className="relative z-10 flex flex-col items-center max-w-3xl w-full px-4 my-auto">
         
         {/* Top Character Cluster */}
-        <div className="flex flex-col items-center relative mb-6">
+        <div className="flex flex-col items-center relative mb-4">
           {/* Question mark bubble */}
           <motion.div 
-            animate={{ y: [0, -10, 0] }}
+            animate={{ y: [0, -8, 0] }}
             transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="w-24 h-24 bg-[#8B74FE] rounded-full flex items-center justify-center text-white text-5xl font-black shadow-lg shadow-indigo-500/30 z-0 relative top-6"
+            className="w-20 h-20 md:w-24 md:h-24 bg-[#8B74FE] rounded-full flex items-center justify-center text-white text-4xl md:text-5xl font-black shadow-lg shadow-indigo-500/30 z-0 relative top-4"
           >
             ?
           </motion.div>
@@ -52,7 +51,7 @@ export const WonderPhase = () => {
           </div>
           
           {/* Speech Bubble */}
-          <div className="mt-2 bg-white text-slate-800 px-4 py-2 rounded-2xl text-sm font-bold shadow-lg relative z-10">
+          <div className="mt-2 bg-white text-slate-900 px-6 py-2.5 rounded-2xl text-base md:text-lg font-black shadow-xl relative z-10">
             Hmm... I wonder... 🤔
             {/* Speech bubble arrow */}
             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rotate-45"></div>
@@ -63,13 +62,13 @@ export const WonderPhase = () => {
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="w-full bg-[#30235C]/80 backdrop-blur-md rounded-3xl p-10 md:p-14 border border-white/10 flex flex-col items-center text-center shadow-2xl mb-8"
+          className="w-full bg-[#30235C]/90 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10 flex flex-col items-center text-center shadow-2xl mb-6"
         >
-          <div className="text-5xl mb-6">👋</div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-tight mb-4 max-w-xl">
-            How many fingers do you have on both hands? Can you count by fives to 100?
+          <div className="text-5xl md:text-6xl mb-4">👋</div>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 max-w-2xl drop-shadow-md">
+            How many <span className="text-[#FFD100] underline decoration-amber-400/50">fingers</span> do you have on both hands? Can you count by <span className="text-[#FFD100] underline decoration-amber-400/50">fives to 100</span>?
           </h2>
-          <p className="text-slate-400 text-sm md:text-base italic font-medium">
+          <p className="text-slate-200 text-base md:text-xl italic font-extrabold">
             Your fingers are the best counting tool ever!
           </p>
         </motion.div>
@@ -79,7 +78,7 @@ export const WonderPhase = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setPhase(PHASES.LEARN)}
-          className="bg-gradient-to-r from-[#7C5DF9] to-[#9277FF] hover:from-[#6c4be0] hover:to-[#8165f0] text-white font-extrabold text-lg px-10 py-4 rounded-full shadow-lg shadow-indigo-500/30 flex items-center gap-3 transition-all"
+          className="bg-gradient-to-r from-[#7C5DF9] to-[#9277FF] hover:from-[#6c4be0] hover:to-[#8165f0] text-white font-black text-xl md:text-2xl px-12 py-4 rounded-full shadow-xl shadow-indigo-500/40 flex items-center gap-3 transition-all cursor-pointer border border-white/20"
         >
           <span>✨ Let's Discover! ✨</span>
         </motion.button>

@@ -71,16 +71,18 @@ export const CrystalCounter = ({ onComplete }) => {
     if (isCorrect) {
       setFeedback('correct');
       narrate(correctAnswerNarration(), true);
-      setTimeout(() => {
-        if (rounds + 1 >= 3) {
-          setGamePhase('complete');
-          setTimeout(() => {
+      if (rounds + 1 >= 3) {
+        setGamePhase('complete');
+        setTimeout(() => {
+          if (typeof onComplete === 'function') {
             onComplete();
-          }, 2000);
-        } else {
-          setRounds(rounds + 1);
-        }
-      }, 2000);
+          }
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          setRounds(prev => prev + 1);
+        }, 1200);
+      }
     } else {
       setFeedback('wrong');
       narrate(wrongAnswerNarration(), true);

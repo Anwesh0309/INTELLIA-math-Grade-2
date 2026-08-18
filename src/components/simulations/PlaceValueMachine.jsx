@@ -83,18 +83,20 @@ export const PlaceValueMachine = ({ onComplete }) => {
     setGamePhase('whirring');
     narrate(correctAnswerNarration(), true);
     
-    setTimeout(() => {
-      if (rounds + 1 >= 3) {
+    if (rounds + 1 >= 3) {
+      setTimeout(() => {
         setGamePhase('complete');
         setTimeout(() => {
           if (typeof onComplete === 'function') {
             onComplete();
           }
-        }, 2000);
-      } else {
-        setRounds(rounds + 1);
-      }
-    }, 2000);
+        }, 1500);
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        setRounds(prev => prev + 1);
+      }, 1200);
+    }
   };
 
   // Drag End handler with collision detection
